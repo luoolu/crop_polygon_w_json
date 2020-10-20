@@ -1,0 +1,30 @@
+#  Labels stats
+21_加大石英: 78
+01_石英: 518
+02_长石: 484
+06_变质岩: 205
+03_酸性喷出岩: 55
+14_胶结物-方解石': 41
+09_云母: 12
+05_沉积岩: 139
+08_凝灰岩: 16
+22_未知颗粒: 182
+15_胶结物-白云石: 83
+16_胶结物-自生粘土矿物: 58
+04_中基性喷出岩: 23
+07_侵入岩: 41
+12_杂基-泥质: 1
+17_胶结物-自生石英: 1
+10_砂屑: 1
+11_鲕粒: 1
+#  data ind
+1, shiying                  518
+2, changshi                 484
+3, jiadashiying             78
+4, bianzhiyan               205
+5, suanxingpenchuyan        55
+6, fangjieshi               41
+7, yunmu                    12
+8, chenjiyan                139
+9, baiyunshi                83
+10, zishengliantukuangwu    58

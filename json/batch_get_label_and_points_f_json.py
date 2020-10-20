@@ -12,21 +12,23 @@ import os
 import cv2 as cv
 import numpy as np
 
-content_path = "/home/luolu/Downloads/data/zhutibaopian/m04/"
+content_path = "/home/luolu/Desktop/test/1-ning71x-16-0672_m001/"
+
 
 if __name__ == '__main__':
     base_name = ''
     counter = 0
-    for filename in sorted(glob.glob('/home/luolu/Downloads/data/zhutibaopian/m04/*.json')):
+    sub_counter = 0
+    for filename in sorted(glob.glob('/home/luolu/Desktop/test/*/*.json')):
         # img = cv.imread(filename, 0)
         # height, width, channels = img.shape
         print("file name:\n", filename)
-        folder_name = os.path.basename(filename)
+        folder_name = filename.split("/")[-2]
         base_name = os.path.basename(filename)
-        print("folder name:\n", folder_name.split(".")[0])
-        imagePath = folder_name.split(".")[0] + ".png"
+        print("folder name:\n", folder_name)
+        imagePath = filename.split(".")[0] + ".png"
         print("imagePath:\n", imagePath)
-        img = cv.imread(content_path + imagePath)
+        img = cv.imread(imagePath)
         with open(filename) as f:
             data = json.load(f)
 
@@ -41,18 +43,30 @@ if __name__ == '__main__':
                     print("label:", data[k][item]['label'])
                     sub_img_name = data[k][item]['label']
                     # make folder for label
+                    # if os.path.exists("/home/luolu/PycharmProjects/crop_polygon_w_json/image/" + sub_img_name):
+                    #     sub_counter = sub_counter + 1
+                    #     try:
+                    #         os.makedirs(
+                    #             "/home/luolu/PycharmProjects/crop_polygon_w_json/image/" + sub_img_name + "_" + str(
+                    #                 sub_counter))
+                    #     except OSError as e:
+                    #         if e.errno != errno.EEXIST:
+                    #             raise
+                    # else:
                     try:
-                        os.makedirs("/home/luolu/PycharmProjects/crop_polygon_w_json/image/" + sub_img_name)
+                        os.makedirs("/home/luolu/Desktop/test_result/" + sub_img_name)
                     except OSError as e:
                         if e.errno != errno.EEXIST:
                             raise
-                    print(type(data[k][item]['points']))
+                    # print(type(data[k][item]['points']))
                     points_list = data[k][item]['points']
-                    print("points_list:\n", data[k][item]['points'])
+                    # print("points_list:\n", data[k][item]['points'])
                     points = np.asarray(points_list)
-                    print("points:\n", points)
+                    points[points < 0] = 0
+                    # print("points:\n", points)
                     points = np.around(points)
                     points = points.astype(int)
+
                     print("int points:\n", points)
 
                     # # (1) Crop the bounding rect
@@ -74,8 +88,17 @@ if __name__ == '__main__':
                     cv.bitwise_not(bg, bg, mask=mask)
                     dst2 = bg + dst
 
-
+                    counter = counter + 1
                     # cv.imwrite("/home/luolu/PycharmProjects/crop_polygon_w_json/image/croped_" + base_name + sub_img_name + ".png", croped)
                     # cv.imwrite("/home/luolu/PycharmProjects/crop_polygon_w_json/image/mask_" + base_name + sub_img_name + ".png", mask)
-                    cv.imwrite("/home/luolu/PycharmProjects/crop_polygon_w_json/image/" + sub_img_name + "/" + imagePath.split('.')[0] + "_" + sub_img_name + ".png", dst)
-                    # cv.imwrite("/home/luolu/PycharmProjects/crop_polygon_w_json/image/dst2_" + base_name + sub_img_name + ".png", dst2)
+                    # print("/home/luolu/PycharmProjects/crop_polygon_w_json/image/"
+                    #       + sub_img_name + "/" + imagePath.split('.')[0] + "_" + str(item) + ".png")
+
+                    if item < 10:
+                        cv.imwrite("/home/luolu/Desktop/test_result/"
+                               + sub_img_name + "/" + folder_name + "_" + imagePath.split('/')[-1].split('.')[-2] + "_0" + str(item) + ".png", dst)
+                    else:
+                        cv.imwrite("/home/luolu/Desktop/test_result/"
+                                   + sub_img_name + "/" + folder_name + "_" + imagePath.split('/')[-1].split('.')[-2] + "_" + str(item) + ".png", dst)
+
+    print("counter:", counter)
